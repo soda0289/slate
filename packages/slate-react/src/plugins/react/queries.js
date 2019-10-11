@@ -240,6 +240,15 @@ function QueriesPlugin() {
     // mark, return the closest parent Node that can be looked up.
     if (!nodeElement.hasAttribute(DATA_ATTRS.KEY)) {
       nodeElement = nodeElement.closest(SELECTORS.KEY)
+
+      // If node is void the closest element will be the void container
+      // and not the block node itself
+      if (nodeElement.getAttribute(DATA_ATTRS.VOID) === 'true') {
+        const voidElement = nodeElement;
+        const voidKey = voidElement.getAttribute(DATA_ATTRS.KEY);
+
+        nodeElement = voidElement.querySelector(`[${DATA_ATTRS.KEY}='${voidKey}']`);
+      }
     }
 
     if (!nodeElement || !nodeElement.getAttribute(DATA_ATTRS.KEY)) {
